@@ -1,0 +1,68 @@
+---
+common:
+  seed: 6955
+  mm_precision: medium
+  lightning_checkpoint:
+logger:
+  # logger folder structure: save_dir/name/version/sub_dir
+  save_dir: ./
+  name: lightning_logs
+  version:
+  sub_dir: tb
+trainer:
+  trainer_params:
+    gradient_clip_val: 0
+    gradient_clip_algorithm: value
+    deterministic: true
+    num_nodes: 1
+    devices: 1
+    accelerator: gpu
+    log_every_n_steps: 1
+    max_epochs: 100
+model_checkpoint:
+  filename: 'last'
+  every_n_epochs: 1
+data:
+  data_dir: ./datasets/
+  data_class: CIFAR100
+  image_size: 512
+  train_loader_params:
+    batch_size: 512
+    num_workers: 8
+  valid_loader_params:
+    batch_size: 512
+    num_workers: 8
+  test_loader_params:
+    batch_size: 1
+    num_workers: 1
+model:
+  model_params:
+    name: resnet50
+    num_classes: 100
+  weights:  # ResNet50_Weights.DEFAULT
+  replace_classifier: true
+optimizer:
+  name: Adam
+  optimizer_params:
+    lr: 1e-3
+    weight_decay: 1e-3
+scheduler: onecyclelr
+criterion:
+  name: CrossEntropyLoss
+  criterion_params: {}
+augmentations:
+  type: light
+  probability: 0.15
+# ----------------------------------------
+# Experimental methods to increase metrics
+# ----------------------------------------
+boosting:
+  swa:
+    enable: false
+    swa_epoch_start: 0.75
+    swa_lrs: 5e-4  # typicall x0.2 ~ x0.5 of initial lr
+    annealing_epochs: 10  # smooth the connection between lr schedule and SWA.
+    annealing_strategy: cos  # cos / lin
+  ema:
+    enable: false
+    decay: 0.999

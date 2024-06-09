@@ -1,0 +1,41 @@
+[project]
+name = 'plcls'
+description = 'General PyTorch Lightning classification repository.'
+version = "0.1.0"
+authors = [
+  {name = 'Ruhrozz', email = 'ruhrozz@bk.ru'}
+]
+requires-python = '>=3.9'
+dependencies = [
+  'typer[all]',
+  'rich',
+  'omegaconf',
+  'lightning',
+  'torchvision',
+  'timm', # EMA
+  'tensorboard',
+  'scipy',
+  'albumentations',
+]
+
+[project.optional-dependencies]
+dev = [
+  'pre-commit',
+  'pylint',
+]
+
+[tool.setuptools.packages.find]
+include = ['plcls*']
+
+[build-system]
+requires = [
+  'setuptools>=64',
+  'setuptools_scm>=8',
+]
+build-backend = 'setuptools.build_meta'
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.messages_control]
+disable = ['C0114', 'C0115', 'C0116', 'W0221']
